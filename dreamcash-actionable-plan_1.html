@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dreamcash — Actionable Growth Plan</title>
+  <style>
+    :root {
+      --bg: #0f0f11;
+      --surface: #16161a;
+      --surface-2: #1c1c22;
+      --border: #1e1e26;
+      --text: #e8e6e2;
+      --muted: #6b6b7e;
+      --accent: #5b5bd6;
+      --accent-2: #22d3ee;
+      --accent-3: #f59e0b;
+      --accent-4: #10b981;
+      --accent-red: #ef4444;
+      --mono: 'SF Mono', 'Fira Mono', 'Consolas', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(15,15,17,0.94);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 52px;
+    }
+    .nav-logo { font-size: 13px; font-weight: 600; letter-spacing: 0.04em; color: var(--text); display: flex; align-items: center; gap: 10px; }
+    .nav-badge { background: rgba(91,91,214,0.2); border: 1px solid rgba(91,91,214,0.4); color: #9b9bff; font-size: 10px; padding: 2px 8px; border-radius: 20px; font-family: var(--mono); letter-spacing: 0.06em; }
+    .nav-progress { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--muted); font-family: var(--mono); }
+    .progress-bar { width: 120px; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--accent-4); border-radius: 2px; transition: width 0.3s; }
+
+    /* LAYOUT */
+    .sidebar {
+      position: fixed; left: 0; top: 52px; bottom: 0;
+      width: 240px; border-right: 1px solid var(--border);
+      background: var(--surface); overflow-y: auto; padding: 24px 0;
+    }
+    .sidebar-section { margin-bottom: 4px; }
+    .sidebar-heading { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); font-family: var(--mono); padding: 8px 20px 6px; }
+    .sidebar-link {
+      display: block; padding: 7px 20px; font-size: 13px; color: var(--muted);
+      text-decoration: none; transition: color 0.15s, background 0.15s;
+      border-left: 2px solid transparent;
+    }
+    .sidebar-link:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+    .sidebar-link.active { color: var(--text); border-left-color: var(--accent); background: rgba(91,91,214,0.06); }
+
+    .main { margin-left: 240px; padding: 80px 0 120px; }
+    .section-container { max-width: 780px; margin: 0 auto; padding: 64px 48px 56px; border-bottom: 1px solid var(--border); }
+    .section-container:last-child { border-bottom: none; }
+
+    /* HEADERS */
+    .section-label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-family: var(--mono); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+    .section-label span { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+    .section-label span.green { background: var(--accent-4); }
+    .section-label span.amber { background: var(--accent-3); }
+    .section-label span.cyan { background: var(--accent-2); }
+    .section-label span.red { background: var(--accent-red); }
+    h2 { font-size: 24px; font-weight: 300; color: var(--text); letter-spacing: -0.01em; margin-bottom: 12px; line-height: 1.3; }
+    .section-desc { font-size: 14px; color: var(--muted); margin-bottom: 32px; line-height: 1.65; }
+
+    /* TASK GROUPS */
+    .task-group { margin-bottom: 28px; }
+    .task-group-title {
+      font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--muted); font-family: var(--mono); padding: 0 0 10px;
+      border-bottom: 1px solid var(--border); margin-bottom: 4px;
+    }
+
+    /* TASK ITEMS */
+    .task {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 14px 0; border-bottom: 1px solid var(--border);
+      cursor: pointer; transition: background 0.1s;
+    }
+    .task:last-child { border-bottom: none; }
+    .task:hover { background: rgba(255,255,255,0.02); margin: 0 -12px; padding-left: 12px; padding-right: 12px; border-radius: 6px; border-bottom: none; }
+
+    .task-checkbox {
+      width: 18px; height: 18px; border-radius: 4px;
+      border: 1px solid var(--border); background: var(--surface-2);
+      flex-shrink: 0; margin-top: 2px; display: flex;
+      align-items: center; justify-content: center;
+      transition: all 0.15s; cursor: pointer;
+    }
+    .task-checkbox svg { display: none; }
+    .task.done .task-checkbox { background: var(--accent-4); border-color: var(--accent-4); }
+    .task.done .task-checkbox svg { display: block; }
+    .task.done .task-title { color: var(--muted); text-decoration: line-through; text-decoration-color: rgba(255,255,255,0.2); }
+    .task.done .task-body { opacity: 0.4; }
+
+    .task-content { flex: 1; min-width: 0; }
+    .task-title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 3px; line-height: 1.4; }
+    .task-body { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+    .task-meta { display: flex; align-items: center; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
+    .tag {
+      font-size: 10px; font-family: var(--mono); letter-spacing: 0.05em;
+      padding: 2px 8px; border-radius: 20px;
+    }
+    .tag-week { background: rgba(91,91,214,0.12); color: #9b9bff; border: 1px solid rgba(91,91,214,0.25); }
+    .tag-month1 { background: rgba(16,185,129,0.1); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
+    .tag-month2 { background: rgba(245,158,11,0.1); color: #fbbf24; border: 1px solid rgba(245,158,11,0.2); }
+    .tag-month3 { background: rgba(34,211,238,0.1); color: #67e8f9; border: 1px solid rgba(34,211,238,0.2); }
+    .tag-ongoing { background: rgba(107,107,126,0.12); color: #9b9baa; border: 1px solid rgba(107,107,126,0.25); }
+    .tag-product { background: rgba(239,68,68,0.1); color: #fca5a5; border: 1px solid rgba(239,68,68,0.2); }
+    .tag-growth { background: rgba(168,85,247,0.1); color: #d8b4fe; border: 1px solid rgba(168,85,247,0.2); }
+    .tag-hire { background: rgba(249,115,22,0.1); color: #fdba74; border: 1px solid rgba(249,115,22,0.2); }
+
+    /* NOTE BOXES */
+    .note { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; margin: 20px 0; }
+    .note p { font-size: 13px; color: var(--muted); margin: 0; line-height: 1.65; }
+    .note strong { color: var(--text); }
+    .note.amber { border-color: rgba(245,158,11,0.3); background: rgba(245,158,11,0.05); }
+    .note.green { border-color: rgba(16,185,129,0.3); background: rgba(16,185,129,0.05); }
+    .note.purple { border-color: rgba(91,91,214,0.3); background: rgba(91,91,214,0.05); }
+
+    /* EMAIL TEMPLATES */
+    .email-block { background: var(--surface-2); border: 1px solid var(--border); border-radius: 8px; padding: 20px 24px; margin: 12px 0; }
+    .email-num { font-size: 10px; font-family: var(--mono); color: var(--muted); letter-spacing: 0.08em; margin-bottom: 6px; }
+    .email-subject { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+    .email-note { font-size: 13px; color: var(--muted); }
+
+    /* PROGRESS SUMMARY */
+    .progress-summary {
+      position: sticky; top: 52px; z-index: 50;
+      background: rgba(15,15,17,0.95); backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border); padding: 10px 48px;
+      display: flex; align-items: center; gap: 20px;
+    }
+    .ps-count { font-size: 13px; font-family: var(--mono); color: var(--muted); }
+    .ps-count strong { color: var(--text); }
+    .ps-bar { flex: 1; max-width: 240px; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+    .ps-fill { height: 100%; background: var(--accent-4); border-radius: 2px; transition: width 0.3s; }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      .main { margin-left: 0; }
+      .section-container { padding: 48px 24px 40px; }
+      .progress-summary { padding: 10px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">
+    Dreamcash — Actionable Growth Plan
+    <span class="nav-badge">INTERNAL</span>
+  </div>
+  <div class="nav-progress">
+    <span id="progress-text">0 / 0 done</span>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  </div>
+</nav>
+
+<div class="sidebar">
+  <div class="sidebar-section">
+    <div class="sidebar-heading">Foundation</div>
+    <a class="sidebar-link" href="#funnel">Fix the Funnel</a>
+    <a class="sidebar-link" href="#email">Email Activation</a>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-heading">Pro Track</div>
+    <a class="sidebar-link" href="#referral">Referral Amplification</a>
+    <a class="sidebar-link" href="#youtube">YouTube</a>
+    <a class="sidebar-link" href="#influencer">Influencer Marketing</a>
+    <a class="sidebar-link" href="#ambassadors">Ambassador Program</a>
+    <a class="sidebar-link" href="#competitions">Competitions</a>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-heading">Product Launches</div>
+    <a class="sidebar-link" href="#copytrading">Copy Trading Launch</a>
+    <a class="sidebar-link" href="#strategies">Strategies Launch</a>
+    <a class="sidebar-link" href="#vaults">Vaults Launch</a>
+    <a class="sidebar-link" href="#predmarkets">Prediction Markets</a>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-heading">Sherwood Track</div>
+    <a class="sidebar-link" href="#sherwood-launch">Sherwood Launch</a>
+    <a class="sidebar-link" href="#paid-meta">Meta & TikTok</a>
+    <a class="sidebar-link" href="#paid-google">Google & App Stores</a>
+    <a class="sidebar-link" href="#paid-other">Other Paid Channels</a>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-heading">Growth Engines</div>
+    <a class="sidebar-link" href="#seo">SEO</a>
+    <a class="sidebar-link" href="#localized">Localized Growth</a>
+
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="progress-summary">
+    <div class="ps-count">Tasks completed: <strong id="ps-done">0</strong> / <strong id="ps-total">0</strong></div>
+    <div class="ps-bar"><div class="ps-fill" id="ps-fill" style="width:0%"></div></div>
+  </div>
+
+  <!-- FUNNEL -->
+  <div class="section-container" id="funnel">
+    <div class="section-label"><span class="amber"></span>Highest priority — do this first</div>
+    <h2>Fix the funnel before spending on acquisition</h2>
+    <div class="section-desc">We have 2M registered users and 6,323 active traders. Until we know where the 99.6% drop off, every euro spent on new users partially fills a leaky bucket. This is the first 30 days.</div>
+
+    <div class="note amber">
+      <p><strong>The rule:</strong> Do not scale any paid acquisition channel until registered → funded conversion is above 5%. Right now it is 0.4%. Fixing this is the highest-leverage work in the entire plan.</p>
+    </div>
+
+    <div class="task-group">
+      <div class="task-group-title">Measurement — instrument the funnel</div>
+
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Define and instrument every funnel step in analytics</div>
+          <div class="task-body">Map the 5 key events: (1) Registration complete, (2) Onboarding complete, (3) First paper trade, (4) Deposit screen opened, (5) First real trade. Ensure every step fires a distinct analytics event so you can see exactly where drop-off happens. Do this in the first 3 days.</div>
+          <div class="task-meta"><span class="tag tag-week">Week 1</span></div>
+        </div>
+      </div>
+
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Pull conversion report: registration → each subsequent step</div>
+          <div class="task-body">From the analytics data, build a simple table: what % of registrations reach step 2? Step 3? The deposit screen? First real trade? Find the single biggest drop-off point. That is what gets fixed first. Everything else waits.</div>
+          <div class="task-meta"><span class="tag tag-week">Week 1</span></div>
+        </div>
+      </div>
+
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Set up deposit abandonment tracking</div>
+          <div class="task-body">Tag the event when a user opens the deposit screen and then navigates away without completing. This group deserves a separate reactivation flow — they are the highest-intent unconverted users we have.</div>
+          <div class="task-meta"><span class="tag tag-week">Week 1</span><span class="tag tag-product">Product</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="task-group">
+      <div class="task-group-title">Onboarding — reduce time to first value</div>
+
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Measure time from install to first paper trade</div>
+          <div class="task-body">This single number defines onboarding health. Target: under 3 minutes. If it is above 5, every screen you remove improves conversion. Identify the 2 lowest-value onboarding screens and test removing them.</div>
+          <div class="task-meta"><span class="tag tag-week">Week 1</span><span class="tag tag-product">Product</span></div>
+        </div>
+      </div>
+
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Move interest picker to the first onboarding screen</div>
+          <div class="task-body">The interest picker (pre-IPO, stocks, commodities, crypto) should be the very first personalization step. When someone picks "pre-IPO companies," the next screen should immediately show SpaceX, OpenAI, Anthropic with live prices. The hook is the product — use it before asking for anything else.</div>
+          <div class="task-meta"><span class="tag tag-month1">Month 1</span><span class="tag tag-product">Product</span></div>
+        </div>
+      </div>
+
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Build a guided first trade experience for new users</div>
+          <div class="task-body">After the interest picker, suggest one specific asset ("You picked tech stocks — Tesla is up 2.4% today") and walk them through a paper trade step by step. Do not leave them to explore. Users who are hand-held through their first trade convert to funded at 3–5x the rate of self-navigators.</div>
+          <div class="task-meta"><span class="tag tag-month1">Month 1</span><span class="tag tag-product">Product</span></div>
+        </div>
+      </div>
+
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">A/B test: remove vs. keep the most friction-heavy onboarding screen</div>
+          <div class="task-body">Run a 50/50 split. Measure completion rate of that step AND first paper trade rate downstream. A single screen removal can meaningfully shift conversion. Do not guess — test.</div>
+          <div class="task-meta"><span class="tag tag-month1">Month 1</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="task-group">
+      <div class="task-group-title">Deposit experience — the highest-friction moment</div>
+
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Audit the deposit flow — write down every crypto term visible to a non-crypto user</div>
+          <div class="task-body">Go through the entire deposit flow as if you have never heard of crypto. Write down every word that would confuse a Robinhood-style user: USDC, stablecoin, wallet address, network fees, blockchain. Create a list. Each one is a conversion killer that needs to be wrapped, hidden, or renamed before Sherwood-facing ads go live.</div>
+          <div class="task-meta"><span class="tag tag-week">Week 1</span><span class="tag tag-product">Product</span></div>
+        </div>
+      </div>
+
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Add social proof element directly above the deposit button</div>
+          <div class="task-body">"Join 6,000+ traders across 25 countries" with a live anonymised deposit ticker ("Someone in Singapore just added $200"). Place this above the deposit CTA. This is a micro-conversion lever that works by reducing anxiety at exactly the moment of hesitation.</div>
+          <div class="task-meta"><span class="tag tag-month1">Month 1</span><span class="tag tag-product">Product</span></div>
+        </div>
+      </div>
+
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Add quick-select deposit amounts: $20 / $50 / $100 / $200</div>
+          <div class="task-body">The default should not be $0 or a blank field. Pre-fill $50 as the highlighted option. Below the amount, show what $50 can do: "Buy 0.05 shares of Tesla, or start a gold position." Make the amount feel tangible before they commit. This reduces decision paralysis.</div>
+          <div class="task-meta"><span class="tag tag-month1">Month 1</span><span class="tag tag-product">Product</span></div>
+        </div>
+      </div>
+
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Build deposit abandonment push notification — next-day follow-up</div>
+          <div class="task-body">If a user opens the deposit screen and does not complete within 30 minutes, schedule a push notification for the following day at the same time of day they were active. Message: "You were about to add funds — pick up where you left off?" Deep-link directly to the deposit screen. This single automation can recover 5–15% of abandoners.</div>
+          <div class="task-meta"><span class="tag tag-month1">Month 1</span><span class="tag tag-product">Product</span></div>
+        </div>
+      </div>
+
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Set up one-question exit survey for deposit abandonment</div>
+          <div class="task-body">After 3 deposit abandonments from the same user, trigger an in-app survey: "What stopped you from adding funds?" Options: Too complicated / Not sure it's safe / Didn't have funds available / Fees too high / Other. Four weeks of this data tells you exactly what to fix next. Act on it.</div>
+          <div class="task-meta"><span class="tag tag-month1">Month 1</span><span class="tag tag-product">Product</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EMAIL ACTIVATION -->
+  <div class="section-container" id="email">
+    <div class="section-label"><span class="cyan"></span>Email marketing</div>
+    <h2>Activating the 2M registered users</h2>
+    <div class="section-desc">Two million people know Dreamcash exists. A 0.5% reactivation rate is 10,000 new funded traders with no paid acquisition budget. Email is the first lever to pull.</div>
+
+    <div class="task-group">
+      <div class="task-group-title">Setup and segmentation</div>
+
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Segment the 2M user list into three cohorts</div>
+          <div class="task-body">Cohort A: Registered but never opened the app again. Cohort B: Used the app (opened, browsed) but never deposited. Cohort C: Opened the deposit screen but abandoned. Each cohort gets a different email sequence. Cohort C is the highest priority — they were one step away.</div>
+          <div class="task-meta"><span class="tag tag-week">Week 1</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Choose and configure email platform</div>
+          <div class="task-body">Brevo (Sendinblue), Klaviyo, or Customer.io — any of these works. The requirements are: behavioural triggers (send based on in-app events), A/B testing, and segmentation by user attributes. Set up the integration so in-app events (paper trade completed, deposit abandoned) can trigger email automations.</div>
+          <div class="task-meta"><span class="tag tag-week">Week 1</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">A/B test subject lines — 3 variants minimum on every email</div>
+          <div class="task-body">Subject lines drive 80% of open rate variance. Write 3 subjects for every email sent: one curiosity-driven, one benefit-driven, one social proof. Kill the losers after 200 opens. The winning subject line is the most valuable thing you learn from each send.</div>
+          <div class="task-meta"><span class="tag tag-month1">Month 1</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="task-group">
+      <div class="task-group-title">Reactivation sequence (Cohort B + C)</div>
+      <div class="note purple"><p><strong>Timing:</strong> Send emails 4–5 days apart. Each email has exactly one job and one CTA. Do not pack multiple messages into one send.</p></div>
+
+      <div class="email-block">
+        <div class="email-num">Email 1 of 5 — Day 0</div>
+        <div class="email-subject">Subject A: "Something unusual is live on Dreamcash"<br>Subject B: "You can now trade SpaceX. Before the IPO."<br>Subject C: "The market never closes here."</div>
+        <div class="email-note" style="margin-top: 8px;">Body: Introduce the exotic asset angle. One image of the asset list (SpaceX, OpenAI, Tesla, Gold). One CTA: "See what's available." Deep-link to the Markets page.</div>
+      </div>
+      <div class="email-block">
+        <div class="email-num">Email 2 of 5 — Day 5</div>
+        <div class="email-subject">Subject A: "$100K to trade. No real money needed."<br>Subject B: "Practice trading before you risk anything"<br>Subject C: "This is how you learn to trade"</div>
+        <div class="email-note" style="margin-top: 8px;">Body: Paper trading. Explain in 3 sentences. Show a screenshot. One CTA: "Start with $100K play money." Deep-link to paper trading onboarding.</div>
+      </div>
+      <div class="email-block">
+        <div class="email-num">Email 3 of 5 — Day 10</div>
+        <div class="email-subject">Subject A: "The trader up 43% this month is using Dreamcash"<br>Subject B: "Who's winning on Dreamcash right now"<br>Subject C: "Real results from real traders"</div>
+        <div class="email-note" style="margin-top: 8px;">Body: Leaderboard social proof. Show top 3 traders, their % gain, their top asset. One CTA: "See the full leaderboard." Deep-link to public leaderboard.</div>
+      </div>
+      <div class="email-block">
+        <div class="email-num">Email 4 of 5 — Day 15</div>
+        <div class="email-subject">Subject A: "New: Copy the best traders automatically"<br>Subject B: "You can now follow a winning wallet"<br>Subject C: "Automated trading just landed"</div>
+        <div class="email-note" style="margin-top: 8px;">Body: Copy trading or Strategies launch announcement. One feature, explained simply. CTA: "Try it now." Tie to the feature launch date — send this when copy trading ships.</div>
+      </div>
+      <div class="email-block">
+        <div class="email-num">Email 5 of 5 — Day 21</div>
+        <div class="email-subject">Subject A: "Your deposit bonus expires this week"<br>Subject B: "Last chance: trade fee credit for new deposits"<br>Subject C: "A reward waiting for you inside the app"</div>
+        <div class="email-note" style="margin-top: 8px;">Body: Tie to the existing referral/incentive program. Specific bonus amount. Real deadline. One CTA: "Claim your bonus." For Cohort C (deposit-abandoned), make the bonus slightly higher than for Cohort B.</div>
+      </div>
+    </div>
+
+    <div class="task-group">
+      <div class="task-group-title">Behavioural triggers — set these up once, run forever</div>
+
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Trigger: paper position up 10%+ → "Your [asset] position is up X% — want to try it for real?"</div>
+          <div class="task-body">Send when a user's paper position crosses +10% gain. The moment of unrealised paper profit is the highest-motivation moment to convert to real money. CTA: "Add funds and lock in real gains."</div>
+          <div class="task-meta"><span class="tag tag-month1">Month 1</span><span class="tag tag-product">Product</span></div>
+        </div>
+      </div>
+
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Trigger: 7 days inactive (funded trader) → re-engagement</div>
+          <div class="task-body">For funded traders who have not logged in for 7 days: "A lot has moved while you were away." Show 3 assets with biggest % move in the past week. CTA: "See what happened." Deep-link to the home feed.</div>
+          <div class="task-meta"><span class="tag tag-month1">Month 1</span><span class="tag tag-product">Product</span></div>
+        </div>
+      </div>
+
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Trigger: competition ending in 48 hours → urgency nudge</div>
+          <div class="task-body">48 hours before each competition closes, send to all eligible participants who have not yet placed in the top 10: "The leaderboard is still open — current top score is X%." Creates urgency without being pushy.</div>
+          <div class="task-meta"><span class="tag tag-month1">Month 1</span><span class="tag tag-product">Product</span></div>
+        </div>
+      </div>
+
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Weekly market digest — short, useful, no hard sell</div>
+          <div class="task-body">Every Tuesday morning: biggest moves on Dreamcash-listed assets (not generic market news), top copy trading performer this week, one upcoming feature or competition. Under 300 words. Useful enough that people look forward to it. The only CTA is one subtle "open the app" link at the bottom. Track open rate, click-through rate to app, and ultimately funded trader retention uplift.</div>
+          <div class="task-meta"><span class="tag tag-month1">Month 1</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REFERRAL -->
+  <div class="section-container" id="referral">
+    <div class="section-label"><span></span>Pro track — referral</div>
+    <h2>Amplifying the existing referral program</h2>
+    <div class="section-desc">The three-tier referral program is already live. The task is making sure every active trader knows about it and has been given a reason to share it this week.</div>
+
+    <div class="task-group">
+      <div class="task-group-title">Visibility and triggers</div>
+
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Audit: what % of active traders have ever visited the referral page?</div>
+          <div class="task-body">If this number is below 30%, the referral program has a visibility problem, not a product problem. Most users simply do not know it exists. Fix this with in-app placement before adding any mechanics.</div>
+          <div class="task-meta"><span class="tag tag-week">Week 1</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Add referral prompt after every winning trade</div>
+          <div class="task-body">After a position closes in profit: "Nice trade. Know someone who should be trading here?" One tap to share. The referral nudge at a high-emotion moment converts at 3–5x the rate of a passive referral link in settings. Do not interrupt the trade — show it on the post-trade confirmation screen.</div>
+          <div class="task-meta"><span class="tag tag-month1">Month 1</span><span class="tag tag-product">Product</span></div>
+        </div>
+      </div>
+
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Check share rate of portfolio cards — set a baseline</div>
+          <div class="task-body">What % of active traders share their portfolio card each month? If below 5%, the card needs work. Test: more visual contrast, larger PnL number, a competitive framing ("My portfolio vs. Bitcoin this month"). The goal is for sharing to feel rewarding, not like a chore.</div>
+          <div class="task-meta"><span class="tag tag-month1">Month 1</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Send "here's what you've earned" monthly email to active referrers</div>
+          <div class="task-body">Every user who has made at least one referral gets a monthly summary: how many people they referred, how much they have earned in the referral program this month, and what they would earn if they referred 5 more. This keeps the referral program top-of-mind and makes the earnings feel real and motivating.</div>
+          <div class="task-meta"><span class="tag tag-month1">Month 1</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- YOUTUBE -->
+  <div class="section-container" id="youtube">
+    <div class="section-label"><span class="red"></span>Pro track — YouTube</div>
+    <h2>YouTube influencer and owned channel</h2>
+    <div class="section-desc">Twitter/X is already working. YouTube is the next channel to build — content has a 12–18 month shelf life and ranks in search. One good video drives installs long after it is published.</div>
+
+    <div class="task-group">
+      <div class="task-group-title">Creator research and outreach</div>
+
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Build a list of 30 YouTube creator candidates across 6 markets</div>
+          <div class="task-body">Markets: English (global), Japanese, Korean, Indonesian, German, Dutch. Criteria: 20K–500K subscribers, trading/finance content, engagement rate above 2.5%, comments full of "which platform should I use?" questions. Use YouTube search for "best crypto trading app," "Hyperliquid tutorial," "how to trade stocks [country]" and note which channels appear.</div>
+          <div class="task-meta"><span class="tag tag-week">Week 1–2</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Score and shortlist the 30 candidates to 10</div>
+          <div class="task-body">Score each on: subscriber count (weight: 20%), engagement rate (30%), audience location match (20%), content relevance to Dreamcash (30%). Shortlist the top 10. These are the first outreach targets.</div>
+          <div class="task-meta"><span class="tag tag-week">Week 2</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Engage organically with top 10 candidates for 1–2 weeks before reaching out</div>
+          <div class="task-body">Comment on their videos, share their content on Twitter/X. Make the cold outreach feel warm. A creator who recognises your name when you email them is 3x more likely to respond positively than a cold email from a stranger.</div>
+          <div class="task-meta"><span class="tag tag-month1">Month 1</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Send outreach emails — personal, specific, short</div>
+          <div class="task-body">Template: 1) Mention one specific video of theirs. 2) One sentence on what Dreamcash is and why their audience would care (use the exotic asset hook). 3) Ask if they would be open to trying it. Do not lead with rates or packages in the first message. Get a reply first. Budget to offer: $2,000–5,000 per dedicated video, plus referral commission.</div>
+          <div class="task-meta"><span class="tag tag-month1">Month 1</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Brief each confirmed creator — loose, not scripted</div>
+          <div class="task-body">Provide: (1) the three things you want them to cover (exotic assets, paper trading, global access), (2) the one thing not to say (no crypto jargon for Sherwood-facing videos), (3) your referral link and tracking URL, (4) app access. Do not write their script. Authentic first-person experience converts better than branded content every time.</div>
+          <div class="task-meta"><span class="tag tag-month1">Month 1</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Track installs and funded traders per creator — monthly review</div>
+          <div class="task-body">Each creator gets a unique referral link. Pull the funded trader count per creator each month. Re-invest in creators under $100 CPA (funded trader). Stop working with any creator above $200 CPA after 60 days of data.</div>
+          <div class="task-meta"><span class="tag tag-ongoing">Ongoing</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="task-group">
+      <div class="task-group-title">Dreamcash owned YouTube channel</div>
+
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Set up YouTube channel with proper SEO (channel name, description, keywords)</div>
+          <div class="task-body">Channel description should contain: "trade pre-IPO stocks," "Hyperliquid trading," "copy trading," "paper trading," "24/7 markets." These are the keywords the channel should rank for in YouTube search over time.</div>
+          <div class="task-meta"><span class="tag tag-month1">Month 1</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Publish first 3 videos: product walkthrough, copy trading tutorial, pre-IPO explainer</div>
+          <div class="task-body">Long-form (10–15 min) ranks better than short-form in YouTube search for this audience. Every video ends with: "Try it yourself with $100K play money — link in description." The pre-IPO explainer video will rank for "how to trade SpaceX" queries that have almost zero competition today.</div>
+          <div class="task-meta"><span class="tag tag-month1">Month 1</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AMBASSADOR PROGRAM -->
+  <div class="section-container" id="ambassadors">
+    <div class="section-label"><span class="green"></span>Pro track — ambassadors</div>
+    <h2>Trader ambassador program — step by step</h2>
+    <div class="section-desc">Ambassadors are selected from within the existing user base. Their endorsement is authentic because they are real users. Build this in Month 2 after copy trading ships and the leaderboard is public.</div>
+
+    <div class="task-group">
+      <div class="task-group-title">Identification</div>
+
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Pull top 20 traders by volume + win rate from the data</div>
+          <div class="task-body">These are the performance candidates. Cross-reference with social media — who of these 20 has a public Twitter, YouTube, or local platform presence? Even 5,000 followers in the right niche is more valuable than 500,000 random followers.</div>
+          <div class="task-meta"><span class="tag tag-month2">Month 2</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Check who already mentions Dreamcash unprompted on social</div>
+          <div class="task-body">Search Twitter/X, Reddit, and YouTube for mentions of Dreamcash. Anyone who mentions the product without being paid is a natural ambassador candidate. Approach them first — they are already sold.</div>
+          <div class="task-meta"><span class="tag tag-month2">Month 2</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Shortlist 5–8 candidates and reach out personally (not via template)</div>
+          <div class="task-body">The message: acknowledge their trading performance specifically, explain you want to work with the platform's best traders, and ask if they'd be interested in a conversation. Short, specific, personal. This is not a mass campaign — it is a relationship you are starting.</div>
+          <div class="task-meta"><span class="tag tag-month2">Month 2</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="task-group">
+      <div class="task-group-title">Program structure</div>
+
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Define what ambassadors get: write it down clearly</div>
+          <div class="task-body">Early access to features 2 weeks pre-launch. Featured profile and "Ambassador" badge on the leaderboard. Enhanced referral commission rate. Monthly payment: $200–500 for authentic posting. Quarterly call with founders. Named in product announcements. This is a list — put it in a one-page document you send to candidates.</div>
+          <div class="task-meta"><span class="tag tag-month2">Month 2</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Define what ambassadors are asked to do: keep it simple</div>
+          <div class="task-body">Two posts per month on their preferred platform about their trading. Share their portfolio card. Participate in at least one competition per quarter and post the results. That is it. No approval process. No required hashtags. No brand voice guidelines. Authentic trading content from a real person outperforms scripted content every time.</div>
+          <div class="task-meta"><span class="tag tag-month2">Month 2</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Measure each ambassador's referral impact monthly — renew or rotate quarterly</div>
+          <div class="task-body">Track: funded traders referred per ambassador per month. If an ambassador refers fewer than 3 funded traders in a quarter, have a conversation about what is not working. If they refer more than 20, increase their compensation. Rotate out ambassadors who are not performing after one quarter.</div>
+          <div class="task-meta"><span class="tag tag-ongoing">Ongoing</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COPY TRADING LAUNCH -->
+  <div class="section-container" id="copytrading">
+    <div class="section-label"><span class="amber"></span>Product launch marketing</div>
+    <h2>Copy trading launch — make the top wallets famous</h2>
+    <div class="section-desc">Copy trading is not just a feature — it is a distribution mechanism if launched correctly. Every top trader on the leaderboard becomes a Dreamcash ambassador with an incentive to promote their standing.</div>
+
+    <div class="task-group">
+      <div class="task-group-title">Pre-launch (2 weeks before)</div>
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Tease "the top 10 wallets you'll be able to copy" on Twitter/X</div>
+          <div class="task-body">Post wallet performance stats (without wallet addresses — just performance) on Twitter/X two weeks before launch. "Meet the trader who has won 73% of their trades in the last 90 days. You'll be able to copy them automatically in 2 weeks." Build anticipation. Tag the traders if they have public accounts.</div>
+          <div class="task-meta"><span class="tag tag-month2">Month 2</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Notify top traders personally — they are about to be featured</div>
+          <div class="task-body">In-app message + email to the top 20 traders: "You are one of the top performers on Dreamcash. When copy trading launches, your results will be publicly visible and other traders will be able to follow you. Your follower count will be public." Give them a reason to be excited and to tell others.</div>
+          <div class="task-meta"><span class="tag tag-month2">Month 2</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="task-group">
+      <div class="task-group-title">Launch day</div>
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Make the leaderboard publicly accessible without login</div>
+          <div class="task-body">A non-user who finds the copy trading leaderboard (via Twitter, Google, or a friend's link) should be able to see live performance without creating an account. This is an acquisition page. Friction = lost users. Keep the "copy this trader" CTA behind signup — but the viewing experience must be open.</div>
+          <div class="task-meta"><span class="tag tag-month2">Month 2</span><span class="tag tag-product">Product</span></div>
+        </div>
+      </div>
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Email the full user base: "Copy trading is live — here's the top wallet to follow right now"</div>
+          <div class="task-body">Feature the #1 trader on the leaderboard with their stats. One CTA: "Follow their trades automatically." This is the highest-engagement email of the launch period — it combines social proof with a specific, immediately actionable offer.</div>
+          <div class="task-meta"><span class="tag tag-month2">Month 2</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STRATEGIES LAUNCH -->
+  <div class="section-container" id="strategies">
+    <div class="section-label"><span class="amber"></span>Product launch marketing</div>
+    <h2>Strategies launch — the QR code social campaign</h2>
+    <div class="section-desc">Every strategy is a sharable object. The QR code mechanic means every share is a referral. Seed this across the ambassador network and influencer partners simultaneously on launch day.</div>
+
+    <div class="task-group">
+      <div class="task-group-title">Launch actions</div>
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Give ambassadors and influencer partners access to Strategies 1 week early</div>
+          <div class="task-body">Ask them to create one strategy each and share the QR code on launch day. Coordinate so multiple posts go live within a 2-hour window on launch morning. The coordinated spike generates more algorithm reach than scattered posts.</div>
+          <div class="task-meta"><span class="tag tag-month3">Month 3+</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Run "best strategy of the month" competition from launch day</div>
+          <div class="task-body">The strategy with the best backtested performance + live performance wins $500 in trading credit. Announce the competition at launch. This gives every trader a reason to create and share strategies immediately. The competition also generates content: "Here's my strategy QR code — try to beat it."</div>
+          <div class="task-meta"><span class="tag tag-month3">Month 3+</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Target algo-trading YouTube creators for sponsored Strategies reviews</div>
+          <div class="task-body">Algo trading channels (TradingView strategy creators, Pine Script educators, trading bot reviewers) have exactly the right audience for Strategies. Reach out to the top 5 with early access + a sponsored video brief. These creators have audiences who are actively looking for a platform that supports strategy automation.</div>
+          <div class="task-meta"><span class="tag tag-month3">Month 3+</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VAULTS LAUNCH -->
+  <div class="section-container" id="vaults">
+    <div class="section-label"><span class="amber"></span>Product launch marketing</div>
+    <h2>Vaults launch — yield as acquisition hook</h2>
+    <div class="section-desc">Vaults are passive income inside the app. This message resonates with a different audience than the active trader. Use this launch to reach people who want yield without actively trading.</div>
+
+    <div class="task-group">
+      <div class="task-group-title">Launch actions</div>
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Build a separate landing page: "Earn yield on your crypto without trading"</div>
+          <div class="task-body">Different CTA, different message, different audience to the trading-focused pages. This page targets people who have crypto sitting in a wallet doing nothing. It is also an SEO page — "crypto yield without trading" is a query with significant search volume and low competition.</div>
+          <div class="task-meta"><span class="tag tag-month2">Month 2</span><span class="tag tag-product">Product</span></div>
+        </div>
+      </div>
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Target DeFi and yield farming YouTubers and newsletters for Vaults</div>
+          <div class="task-body">The yield-seeking crypto audience is different from the perpetuals trading audience. Find 5 YouTube channels and 3 newsletters that cover DeFi yield strategies and offer a sponsored slot around the Vaults launch. Message: "Hyperliquid vault yields, inside a clean consumer app."</div>
+          <div class="task-meta"><span class="tag tag-month2">Month 2</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SHERWOOD LAUNCH -->
+  <div class="section-container" id="sherwood-launch">
+    <div class="section-label"><span class="cyan"></span>Sherwood track</div>
+    <h2>Project Sherwood launch — coordinated week</h2>
+    <div class="section-desc">The Sherwood launch is the biggest marketing event in Dreamcash history to date. All channels activate in the same week. Every asset and brief should be prepared 3 weeks in advance.</div>
+
+    <div class="task-group">
+      <div class="task-group-title">3 weeks pre-launch</div>
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Write Product Hunt listing: title, tagline, description, first comment</div>
+          <div class="task-body">Title: "Dreamcash — Trade SpaceX, OpenAI, Tesla & Gold 24/7." Tagline: "The app where markets never close. Start with $100K play money." First comment (posted by founder): the story of how it was built and why. Vote strategy: brief 150+ community contacts 24 hours before, ask them to vote Tuesday 12:01am PST.</div>
+          <div class="task-meta"><span class="tag tag-month3">3 weeks before</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Brief all influencer partners on Sherwood launch — give them 2-week runway</div>
+          <div class="task-body">Finance TikTok and YouTube creators need time to film, edit, and schedule. Brief them 3 weeks before launch, have content ready 1 week before, go live on launch day or the day after. Coordinating multiple creators to post in the same week creates a feeling of momentum that a single post cannot.</div>
+          <div class="task-meta"><span class="tag tag-month3">3 weeks before</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Write and send press pitches to 15 journalists</div>
+          <div class="task-body">Target: Bloomberg Crypto, CoinDesk, The Block, TechCrunch Fintech, Decrypt + 1–2 regional press per key market (NL, DE, JP, KR). Pitch subject: "The app that lets anyone trade SpaceX before the IPO — legally, globally, 24/7." Include one-page fact sheet: product stats, pre-IPO angle, global availability, paper trading mechanic.</div>
+          <div class="task-meta"><span class="tag tag-month3">2 weeks before</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="task-group">
+      <div class="task-group-title">Launch week</div>
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Launch day: Product Hunt + Hacker News Show HN simultaneously</div>
+          <div class="task-body">PH goes live Tuesday 12:01am PST. HN "Show HN" post goes live same day at 9am EST (US peak HN traffic). Both require active participation in comments for the first 4 hours — respond to every comment, thoughtfully. HN especially rewards founders who engage genuinely with criticism.</div>
+          <div class="task-meta"><span class="tag tag-month3">Launch day</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Post authentic Reddit threads in r/stocks, r/investing, r/personalfinance</div>
+          <div class="task-body">Not ads — real posts from real users (team members, ambassadors) sharing a genuine discovery: "I found an app where I can trade SpaceX and OpenAI globally, 24/7, and try it with play money first. Sharing in case anyone else has been looking for something like this." Answer comments honestly, including critical ones. Do not delete negative replies.</div>
+          <div class="task-meta"><span class="tag tag-month3">Launch week</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Monitor: paper trader → funded conversion rate daily for first 2 weeks</div>
+          <div class="task-body">This is the most important metric of the Sherwood launch. If it is below 5% after one week, stop acquiring more paper traders and fix the conversion first. If it is above 15%, scale acquisition aggressively. Look at the drop-off point daily — which step are paper traders stopping at?</div>
+          <div class="task-meta"><span class="tag tag-month3">Launch week+</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAID — META AND TIKTOK -->
+  <div class="section-container" id="paid-meta">
+    <div class="section-label"><span class="red"></span>Paid acquisition</div>
+    <h2>Meta (Instagram + Facebook) and TikTok</h2>
+    <div class="section-desc">Only activate after conversion funnel is above 5% registered-to-funded. Prepare creatives in advance. Launch with test budgets and scale what works.</div>
+
+    <div class="task-group">
+      <div class="task-group-title">Meta — Instagram and Facebook</div>
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Create 5 ad creative variants for Meta — lead with screen recording format</div>
+          <div class="task-body">Best-performing format: 15-second screen recording of the paper trading experience. No voiceover. Just the screen. Someone opens the app, finds SpaceX, taps Buy, watches the position. CTA overlay: "Start with $100K play money." This format converts at 3–5x the rate of traditional financial advertising. Create 5 variants with different assets (SpaceX, OpenAI, Tesla, Gold, Samsung).</div>
+          <div class="task-meta"><span class="tag tag-month3">Pre-Sherwood</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Set up Meta Business Manager with proper tracking</div>
+          <div class="task-body">Install Meta Pixel on the website. Set up app events via the Meta SDK for: install, registration complete, first paper trade, deposit screen view, first real trade. This allows campaign optimisation against real business outcomes, not just installs. Without this, Meta will optimise for cheap installs that never convert.</div>
+          <div class="task-meta"><span class="tag tag-month1">Month 1</span><span class="tag tag-product">Product</span></div>
+        </div>
+      </div>
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Launch Meta test campaign: $2,000/week, 5 creative variants, optimise for "first paper trade"</div>
+          <div class="task-body">Run for 2 weeks. Audience: 25–45, interested in stocks/investing/finance, English + NL + DE + JP + KR. After 2 weeks: kill the 3 worst-performing creatives, double budget on the 2 best. Scale any creative under $15 CPA on first paper trade aggressively.</div>
+          <div class="task-meta"><span class="tag tag-month3">Post-Sherwood</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="task-group">
+      <div class="task-group-title">TikTok</div>
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Source 3 UGC-style video ads from real users or micro-creators</div>
+          <div class="task-body">TikTok ads that look like ads perform 3–5x worse than ads that look like organic content. Commission 3 real creators (not influencer partners — just relatable people) to film a 30-second first-person video: "I just found out I can trade SpaceX on this app..." Pay $200–400 per video. This is the creative format that works on TikTok for fintech.</div>
+          <div class="task-meta"><span class="tag tag-month3">Pre-Sherwood</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Launch TikTok test: $1,000/week, 3 creative variants, TopView or In-Feed</div>
+          <div class="task-body">In-Feed ads for initial test (lower cost, broader reach). Target: 22–35, interest in finance, investing, entrepreneurship. Markets: US, UK, NL, DE, SG, ID. Optimise for link click (to paper trading) in week 1, then switch to app install in week 2 once pixel has enough data.</div>
+          <div class="task-meta"><span class="tag tag-month3">Post-Sherwood</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAID — GOOGLE AND APP STORES -->
+  <div class="section-container" id="paid-google">
+    <div class="section-label"><span class="red"></span>Paid acquisition</div>
+    <h2>Google Search, UAC, and App Stores</h2>
+    <div class="section-desc">Google captures users who are already searching. App Store and Play Store optimisation is free traffic. Start both immediately.</div>
+
+    <div class="task-group">
+      <div class="task-group-title">App Store Optimisation (ASO) — free, do this now</div>
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Rewrite Google Play and App Store listings with ASO keywords</div>
+          <div class="task-body">Subtitle/short description: "Trade Stocks, Pre-IPO & Crypto 24/7." Description keywords to include: copy trading, paper trading, pre-IPO stocks, Hyperliquid, automated trading, trade SpaceX, trade Tesla. Title should contain a primary keyword if possible. Use AppFollow or AppTweak to research keyword difficulty and search volume before finalising.</div>
+          <div class="task-meta"><span class="tag tag-week">Week 1</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Redesign app store screenshots — lead with the exotic asset angle</div>
+          <div class="task-body">Screenshot 1: The asset list showing SpaceX, OpenAI, Tesla, Gold, Samsung. Screenshot 2: The paper trading screen with $100K balance. Screenshot 3: Copy trading leaderboard. Screenshot 4: Portfolio view. Screenshots should tell the product story in 4 frames without any text being necessary. A/B test: run 2 screenshot sets in Google Play via experiments and measure install conversion rate.</div>
+          <div class="task-meta"><span class="tag tag-month1">Month 1</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Build in-app review request — trigger after first profitable trade</div>
+          <div class="task-body">After a user closes a profitable trade (real money), show a native "Rate Dreamcash" prompt. This is the highest-emotion positive moment in the product. Reviews directly impact app store ranking. Target: 4.4+ stars on both stores. Timing of the prompt is everything — after a win, not during onboarding or at random.</div>
+          <div class="task-meta"><span class="tag tag-month1">Month 1</span><span class="tag tag-product">Product</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="task-group">
+      <div class="task-group-title">Google Search Ads</div>
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Build keyword list for Google Search — high intent, low competition</div>
+          <div class="task-body">Priority terms: "Hyperliquid trading app," "copy trading crypto," "trade SpaceX stock," "trade pre-IPO," "paper trading app," "24/7 stock trading app," "Robinhood alternative [country]." Check search volume and CPC estimates in Google Keyword Planner. Start with the bottom-funnel terms first (highest intent, best conversion).</div>
+          <div class="task-meta"><span class="tag tag-month1">Month 1</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Write 5 responsive search ad copy variants — test the exotic asset angle vs. paper trading angle</div>
+          <div class="task-body">Variant A headline: "Trade SpaceX Before the IPO." Variant B: "Start With $100K Play Money." Variant C: "24/7 Global Trading App." Variant D: "Copy the Best Traders Automatically." Variant E: "No Account Minimum. Trade Anywhere." Google RSAs rotate these and find the winning combinations automatically. After 2 weeks, pause the lowest CTR variants.</div>
+          <div class="task-meta"><span class="tag tag-month1">Month 1</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEO -->
+  <div class="section-container" id="seo">
+    <div class="section-label"><span class="green"></span>SEO</div>
+    <h2>SEO — building organic search traffic</h2>
+    <div class="section-desc">SEO compounds. Work done in Month 1 generates traffic in Month 4 and beyond. Prioritise pages that answer queries with high intent and low competition — the exotic asset angle has almost no SEO competition today.</div>
+
+    <div class="task-group">
+      <div class="task-group-title">Website and technical SEO</div>
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Set up Google Search Console and verify the new website domain</div>
+          <div class="task-body">Submit sitemap. Monitor crawl errors, index coverage, and search impressions from day one. Search Console is the most important free SEO tool — use it weekly.</div>
+          <div class="task-meta"><span class="tag tag-week">Week 1</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Build individual asset pages (/trade/spacex, /trade/openai, /trade/tesla etc.)</div>
+          <div class="task-body">Each page: company info, what the asset is, how it trades on Dreamcash, live price widget, "start trading with paper money" CTA. These pages rank for "[company name] stock trading" queries. Start with the top 20 most-searched assets: SpaceX, OpenAI, Tesla, NVIDIA, Gold, Bitcoin, Ethereum, Samsung.</div>
+          <div class="task-meta"><span class="tag tag-month1">Month 1</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="task-group">
+      <div class="task-group-title">Content — first 10 articles</div>
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Write: "What is pre-IPO trading and how does it work?" (1,500 words)</div>
+          <div class="task-body">This is the cornerstone content piece. It ranks for "pre-IPO trading" (medium volume, low competition) and links to all asset-specific pages. The answer in the last paragraph: "Dreamcash makes this available globally, starting with $100K in play money."</div>
+          <div class="task-meta"><span class="tag tag-month1">Month 1</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Write: "Dreamcash vs Robinhood — which trading app works globally?" (1,200 words)</div>
+          <div class="task-body">Comparison pages convert at 2–4x informational content. Our differentiators vs Robinhood are clear: global access (Robinhood is US-only), 24/7 trading (Robinhood has market hours), pre-IPO assets (Robinhood does not offer SpaceX/OpenAI), no account minimum, paper trading. This page ranks for "Robinhood alternative" and "best trading app [country]."</div>
+          <div class="task-meta"><span class="tag tag-month1">Month 1</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Write: "How to trade stocks on weekends" (1,000 words)</div>
+          <div class="task-body">This query gets searched heavily on Saturdays and Sundays. The answer: most apps do not allow it — Dreamcash does. Short, useful article. Ranks for "can you trade stocks on weekends" and "24/7 stock trading." Every visitor is a perfect Dreamcash prospect.</div>
+          <div class="task-meta"><span class="tag tag-month1">Month 1</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Write 5 country-specific "best trading app [country]" pages</div>
+          <div class="task-body">Priority countries: Netherlands, South Korea, Indonesia, Germany, Japan — our top markets outside the US. Each page: what trading apps are available in [country], why most options are limited, how Dreamcash works globally. These rank for high-intent local queries and convert extremely well because the visitor has a specific need we directly solve.</div>
+          <div class="task-meta"><span class="tag tag-month2">Month 2</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOCALIZED -->
+  <div class="section-container" id="localized">
+    <div class="section-label"><span></span>Localized growth</div>
+    <h2>Top 5 markets — localized activation</h2>
+    <div class="section-desc">HK, JP, KR, ID, VN are all in the top 10 by active users. Western products rarely invest in local engagement in these markets. That is the opportunity.</div>
+
+    <div class="task-group">
+      <div class="task-group-title">Market activation tasks</div>
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Identify 1–2 local community managers per top market</div>
+          <div class="task-body">Not full-time employees — part-time contractors (10 hours/week, $1,500–2,500/month) who are genuine participants in their local finance communities. They engage in KakaoTalk (KR), Zalo (VN), local Reddit equivalents, and finance forums. They post in the local language. They are not a support team — they are community participants who happen to use Dreamcash.</div>
+          <div class="task-meta"><span class="tag tag-month1">Month 1</span></div>
+        </div>
+      </div>
+      <div class="task" onclick="toggleTask(this)">
+        <div class="task-checkbox"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="task-content">
+          <div class="task-title">Localise app store listings in JP, KR, ID top-5 languages</div>
+          <div class="task-body">Translated title, description, and screenshots in each language. Screenshots in local language dramatically improve conversion rates in non-English markets — often by 20–40%. Use a native translator, not Google Translate. The investment is ~$200–500 per language and pays for itself with a single week of improved conversion.</div>
+          <div class="task-meta"><span class="tag tag-month1">Month 1</span><span class="tag tag-growth">Growth</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+<script>
+  function toggleTask(el) {
+    el.classList.toggle('done');
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const all = document.querySelectorAll('.task');
+    const done = document.querySelectorAll('.task.done');
+    const pct = all.length ? Math.round((done.length / all.length) * 100) : 0;
+    document.getElementById('progress-text').textContent = done.length + ' / ' + all.length + ' done';
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('ps-done').textContent = done.length;
+    document.getElementById('ps-total').textContent = all.length;
+    document.getElementById('ps-fill').style.width = pct + '%';
+  }
+
+  // Sidebar active link on scroll
+  const sections = document.querySelectorAll('.section-container');
+  const navLinks = document.querySelectorAll('.sidebar-link');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        navLinks.forEach(link => {
+          link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+
+  sections.forEach(s => observer.observe(s));
+
+  // Init
+  updateProgress();
+</script>
+
+</body>
+</html>
